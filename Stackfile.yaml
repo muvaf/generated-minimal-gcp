@@ -1,0 +1,9 @@
+crdTemplate:
+  fields:
+  - name: region
+    type: string
+    comment: "Region is where your resources will be deployed to"
+  - name: credentialsSecretRef
+    package: github.com/crossplaneio/crossplane-runtime/apis/core/v1alpha1
+    type: SecretKeySelector
+    comment: "CredentialsSecretRef refers to the credential secret that you would like to use"
