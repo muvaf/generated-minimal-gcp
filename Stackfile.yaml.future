@@ -1,0 +1,35 @@
+crd:
+  group: resourcepacks.crossplane.io
+  version: v1alpha1
+  kind: MinimalAWS
+  specFields:
+  - name: region
+    type: string
+    comment: "Region is where your resources will be deployed to"
+  - name: credentialsSecretRef
+    package: github.com/crossplaneio/crossplane-runtime/apis/core/v1alpha1
+    type: SecretKeySelector
+    comment: "CredentialsSecretRef refers to the credential secret that you would like to use"
+  statusFields:
+  - name: state
+    type: string
+    package: github.com/muvaf/custom/package
+    comment: "State reports readiness if all conditions of all resources report ready"
+engine:
+  type: kustomize
+  # These patchers are run before kustomize is applied.
+  # Usually used to populate engine configuration(kustomization.yaml in this case) with runtime data.
+  patchers:
+    - package: ""
+      type: VariantFiller
+deployment:
+  # These patchers are run on the rendered resources right before deployment.
+  # Usually used to add things that are hard to add before the render.
+  preApplyPatchers:
+    - package: ""
+      type: OwnerReferenceAdder
+  # These patchers are run with CR instance and the resources.
+  # Usually used to update CR status custom fields.
+  postApplyPatchers:
+    - package: ""
+      type: CRStatusReadinessUpdater
